@@ -1,21 +1,3 @@
-/*
-Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
-jank-free at 60 frames per second.
-
-There are two major issues in this code that lead to sub-60fps performance. Can
-you spot and fix both?
-
-
-Built into the code, you'll find a few instances of the User Timing API
-(window.performance), which will be console.log()ing frame rate data into the
-browser console. To learn more about User Timing API, check out:
-http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
-
-Creator:
-Cameron Pittman, Udacity Course Developer
-cameron *at* udacity *dot* com
-*/
-
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
@@ -406,13 +388,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -424,7 +406,7 @@ var resizePizzas = function(size) {
    // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementById("#randomPizzas").offsetWidth;
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // Optional TODO: change to 3 sizes? no more xl?
@@ -450,10 +432,10 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.getElementsByClassName(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.getElementsByClassName(".randomPizzaContainer")[i], size);
-      var newwidth = (document.getElementsByClassName(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.getElementsByClassName(".randomPizzaContainer")[i].style.width = newwidth;
+    for (var i = 0; i < document.getElementsByClassName("randomPizzaContainer").length; i++) {
+      var dx = determineDx(document.getElementsByClassName("randomPizzaContainer")[i], size);
+      var newwidth = (document.getElementsByClassName("randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      document.getElementsByClassName("randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -501,14 +483,18 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.getElementsByClassName('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    console.log(phase, document.body.scrollTop / 1250);
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  var items = document.getElementsByClassName('mover');
+  var itemsLen = items.length; 
+  var scrollTopCalculation = document.body.scrollTop / 1250;
+  var phaseArray = [];
+  // Produces 5 unique numbers, and push them into an array
+  for (var i = 0; i < 5; i++) {
+    phaseArray.push(Math.sin(scrollTopCalculation + i) * 100);
   }
-
+  // Places pizza images on screen
+  for (var i=0; i<itemsLen; i++) {
+    items[i].style.left = items[i].basicLeft + phaseArray[i % 5] + 'px';
+  }
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
@@ -526,7 +512,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  // Reduced the pizza number from 200 to 30
+  for (var i = 0; i < 30; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -534,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.getElementById("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
