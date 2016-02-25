@@ -35,3 +35,7 @@ I did the followings to ensure a frame rate at 60 when scrolling the page.
 * Moved variables outside the `for` loop in the `updatePositions` function to make the loop more efficient
 * Seperated original `for` loop into two `for` loops to enhance performance
 * Added `backface-visibility: hidden;` to `views/css/style.css`
+
+
+## Reduce time to resize pizza images
+I Moved variables from the `for` loop to reduce the time of resizing from 100+ ms to around 1.5 ms. 
